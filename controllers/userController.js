@@ -2,7 +2,7 @@ const User = require('../models/UserModel')
 const bcrypt = require('bcryptjs')
 const { createJWT } = require('../helpers/createJWT')
 const { toArs } = require('../helpers/toArs')
-const { INVALID_AUTH, EMPTY_BALANCE, SERVER_ERROR } = require('../constants/messages')
+const { INVALID_AUTH, EMPTY_BALANCE, SERVER_ERROR, WRONG_USERNAME } = require('../constants/messages')
 
 
     // Login user
@@ -33,6 +33,10 @@ const { INVALID_AUTH, EMPTY_BALANCE, SERVER_ERROR } = require('../constants/mess
 
     const createUser = async (req, res) => {
         const data = req.body
+        const user = await User.findOne({ where: { username:data.username } })
+        if(user){
+            res.status(409).json(WRONG_USERNAME)
+        }
         try {
             const salt = bcrypt.genSaltSync();
             const user = new User({
