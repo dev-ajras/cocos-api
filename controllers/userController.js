@@ -33,7 +33,7 @@ const { INVALID_AUTH, EMPTY_BALANCE, SERVER_ERROR, WRONG_USERNAME } = require('.
 
     const createUser = async (req, res) => {
         const data = req.body
-        const user = await User.findOne({ where: { username:data.username } })
+        const user = await User.findOne({ where: { username:data.userName } })
         if(user){
             res.status(409).json(WRONG_USERNAME)
         }
